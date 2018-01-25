@@ -7,4 +7,14 @@
 
   <ProjectExtensions><VisualStudio><UserProperties settings_1json__JSONSchema="http://jsonapi.org/schema" /></VisualStudio></ProjectExtensions>
 
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="settings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

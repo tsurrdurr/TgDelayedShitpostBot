@@ -6,7 +6,15 @@ namespace TgDelayedShitpostBot
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            try
+            {
+                var settings = Settings.Instance();
+                
+            }
+            catch
+            {
+                GarbageFunctionality.Log("Shutting down");
+            }
         }
     }
 }
