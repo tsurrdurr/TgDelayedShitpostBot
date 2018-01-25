@@ -3,6 +3,11 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
+# !!! CUSTOM !!!
+# I don't want to accidentially commit my token to the repository
+# Rename the .sample.json file maybe
+TgDelayedShitpostBot/settings.json
+
 # User-specific files
 *.suo
 *.user

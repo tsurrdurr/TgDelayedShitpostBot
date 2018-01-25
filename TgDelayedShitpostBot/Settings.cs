@@ -12,6 +12,8 @@ namespace TgDelayedShitpostBot
         private Settings() { }
 
         private static Settings _settings;
+        private const string noTokenString = "YOUR_TELEGRAM_BOT_API_TOKEN";
+        private const string settingsPathString = "settings.json";
         public string token;
 
         public static Settings Instance()
@@ -24,9 +26,10 @@ namespace TgDelayedShitpostBot
         {
             try
             {
-                var jsonText = File.ReadAllText("settings.json");
+                var jsonText = File.ReadAllText(settingsPathString);
                 var jsonObj = JsonConvert.DeserializeObject<Settings>(jsonText);
                 if (jsonObj == null) throw new JsonException("Could not deserialize " + jsonText);
+                else if (jsonObj.token == noTokenString) throw new FormatException("Please change default token in settings.json to your Telegram Bot API token");
                 return jsonObj;
             }
             catch(Exception ex)
@@ -40,8 +43,8 @@ namespace TgDelayedShitpostBot
         {
             try
             {
-                string jsonText = JsonConvert.SerializeObject(_settings, );
-                File.WriteAllText("settings.json", jsonText);
+                string jsonText = JsonConvert.SerializeObject(_settings);
+                File.WriteAllText(settingsPathString, jsonText);
             }
             catch(Exception ex)
             {
