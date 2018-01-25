@@ -15,6 +15,8 @@ namespace TgDelayedShitpostBot
         private const string noTokenString = "YOUR_TELEGRAM_BOT_API_TOKEN";
         private const string settingsPathString = "settings.json";
         public string token;
+        public int ownerId;
+        public int chatId;
 
         public static Settings Instance()
         {

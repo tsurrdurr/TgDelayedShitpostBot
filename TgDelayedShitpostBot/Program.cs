@@ -9,9 +9,9 @@ namespace TgDelayedShitpostBot
             try
             {
                 var settings = Settings.Instance();
-                
+                var api = new TelegramAPIClass(settings.token);
             }
-            catch
+            catch(Exception ex)
             {
                 GarbageFunctionality.Log("Shutting down");
             }

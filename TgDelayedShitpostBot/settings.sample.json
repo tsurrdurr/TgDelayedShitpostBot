@@ -1,3 +1,5 @@
 ﻿{
-  "token": "YOUR_TELEGRAM_BOT_API_TOKEN"
+  "token": "YOUR_TELEGRAM_BOT_API_TOKEN",
+  "chatId": "TARGET_CHAT_ID",
+  "ownerId": "OWNER_ID"
 }
