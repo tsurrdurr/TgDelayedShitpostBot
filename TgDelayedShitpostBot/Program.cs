@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 namespace TgDelayedShitpostBot
 {
@@ -9,6 +10,12 @@ namespace TgDelayedShitpostBot
             try
             {
                 var settings = Settings.Instance();
+                using (var context = BotDbContextFactory.Create(Settings.Instance().connectionString))
+                {
+                    var listFromDb = (from all in context.Shitposts select all).ToList();
+                    ShitpostQueue.posts = listFromDb;
+                }
+                
                 var api = new TelegramAPIClass(settings.token);
             }
             catch(Exception ex)

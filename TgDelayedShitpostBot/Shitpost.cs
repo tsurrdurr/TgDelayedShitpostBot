@@ -6,7 +6,7 @@ using System.Text;
 
 namespace TgDelayedShitpostBot
 {
-    class Shitpost
+    public class Shitpost
     {
         public Shitpost(Telegram.Bot.Types.Message msg)
         {
@@ -16,7 +16,9 @@ namespace TgDelayedShitpostBot
             this.addedTime = DateTime.Now;
         }
 
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
+        public Shitpost() { }
+
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int shitpostId { get; set; }
         public int senderId { get; set; }
         public long chatId { get; set; }

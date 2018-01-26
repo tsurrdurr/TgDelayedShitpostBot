@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Timers;
 using Telegram.Bot;
 
 namespace TgDelayedShitpostBot
@@ -8,11 +9,16 @@ namespace TgDelayedShitpostBot
     public class TelegramAPIClass
     {
         private static TelegramBotClient Bot;
-
+        private Timer timer = new Timer
+        {
+            Interval = Settings.Instance().timerIntervalSeconds * 1000,
+            Enabled = false
+        };
 
         public TelegramAPIClass(string token)
         {
             Bot = new TelegramBotClient(token);
+            timer.Elapsed += Timer_Elapsed;
             var me = Bot.GetMeAsync().Result;
             Console.Title = "Shitpost machine";
             BindBotEvents();
@@ -25,25 +31,46 @@ namespace TgDelayedShitpostBot
         private void BindBotEvents()
         {
             Bot.OnMessage += Bot_OnMessage;
+            if(ShitpostQueue.posts.Count > 0)
+            {
+                timer.Enabled = true;
+            }
+        }
+
+        private void Timer_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            var shitpost = ShitpostQueue.posts[0];
+            Bot.ForwardMessageAsync(Settings.Instance().chatId, shitpost.senderId, shitpost.messageId);
+            using (var context = BotDbContextFactory.Create(Settings.Instance().connectionString))
+            {
+                context.Shitposts.Remove(shitpost);
+                context.SaveChanges();
+            }
+            ShitpostQueue.posts.RemoveAt(0);
+            if (ShitpostQueue.posts.Count == 0) timer.Enabled = false;
         }
 
         private void Bot_OnMessage(object sender, Telegram.Bot.Args.MessageEventArgs e)
         {
             var message = e.Message;
-            if (SenderCanAddPosts(message))
+            if(message.Chat.Type == Telegram.Bot.Types.Enums.ChatType.Private)
             {
-                if (e.Message.Photo != null)
+                if (SenderCanAddPosts(message))
                 {
-                    AddToRepostQueue(message);
+                    if (e.Message.Photo != null)
+                    {
+                        AddToRepostQueue(message);
+                    }
+                    else
+                    {
+                        HandleNonPicture(message);
+                    }
                 }
                 else
                 {
-                    HandleNonPicture(message);
+                    if (!message.From.IsBot)
+                        Bot.SendTextMessageAsync(message.Chat, "You are not my master!");
                 }
-            }
-            else
-            {
-                Bot.SendTextMessageAsync(message.Chat, "You are not my master!");
             }
         }
 
@@ -64,10 +91,11 @@ namespace TgDelayedShitpostBot
             using (var context = BotDbContextFactory.Create(Settings.Instance().connectionString))
             {
                 var shitpost = new Shitpost(msg);
+                ShitpostQueue.posts.Add(shitpost);
                 context.Add(shitpost);
                 context.SaveChanges();
             }
-            Bot.ForwardMessageAsync(Settings.Instance().chatId, msg.Chat.Id, msg.MessageId);
+            if (!timer.Enabled) timer.Enabled = true;
         }
 
         private bool SenderCanAddPosts(Telegram.Bot.Types.Message message)

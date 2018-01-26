@@ -7,6 +7,7 @@
 # I don't want to accidentially commit my token to the repository
 # Rename the .sample.json file maybe
 TgDelayedShitpostBot/settings.json
+TgDelayedShitpostBot/database.sqlite
 
 # User-specific files
 *.suo
