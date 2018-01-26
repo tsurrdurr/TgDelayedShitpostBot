@@ -34,7 +34,7 @@ namespace TgDelayedShitpostBot
             {
                 if (e.Message.Photo != null)
                 {
-                    RepostInEveryChat(message);
+                    AddToRepostQueue(message);
                 }
                 else
                 {
@@ -59,8 +59,14 @@ namespace TgDelayedShitpostBot
             }
         }
 
-        private void RepostInEveryChat(Telegram.Bot.Types.Message msg)
+        private void AddToRepostQueue(Telegram.Bot.Types.Message msg)
         {
+            using (var context = BotDbContextFactory.Create(Settings.Instance().connectionString))
+            {
+                var shitpost = new Shitpost(msg);
+                context.Add(shitpost);
+                context.SaveChanges();
+            }
             Bot.ForwardMessageAsync(Settings.Instance().chatId, msg.Chat.Id, msg.MessageId);
         }
 

@@ -8,7 +8,13 @@
   <ProjectExtensions><VisualStudio><UserProperties settings_1json__JSONSchema="http://jsonapi.org/schema" /></VisualStudio></ProjectExtensions>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="2.0.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite.Core" Version="2.0.1" />
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
+    <PackageReference Include="System.Data.SQLite" Version="1.0.106" />
+    <PackageReference Include="System.Data.SQLite.Core" Version="1.0.106" />
+    <PackageReference Include="System.Data.SQLite.EF6" Version="1.0.106" />
+    <PackageReference Include="System.Data.SQLite.Linq" Version="1.0.106" />
     <PackageReference Include="Telegram.Bot" Version="13.4.0" />
   </ItemGroup>
 

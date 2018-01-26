@@ -1,5 +1,6 @@
 ﻿{
   "token": "YOUR_TELEGRAM_BOT_API_TOKEN",
   "chatId": "TARGET_CHAT_ID",
-  "ownerId": "OWNER_ID"
+  "ownerId": "OWNER_ID",
+  "connectionString": "Data Source=database.sqlite"
 }

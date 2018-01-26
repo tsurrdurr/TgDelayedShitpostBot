@@ -17,6 +17,7 @@ namespace TgDelayedShitpostBot
         public string token;
         public int ownerId;
         public int chatId;
+        public string connectionString;
 
         public static Settings Instance()
         {
