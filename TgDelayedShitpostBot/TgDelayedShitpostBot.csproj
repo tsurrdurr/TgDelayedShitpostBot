@@ -5,7 +5,7 @@
     <TargetFramework>netcoreapp2.0</TargetFramework>
   </PropertyGroup>
 
-  <ProjectExtensions><VisualStudio><UserProperties settings_1json__JSONSchema="http://jsonapi.org/schema" /></VisualStudio></ProjectExtensions>
+  <ProjectExtensions><VisualStudio><UserProperties settings_1json__JSONSchema="http://json.schemastore.org/webextension" /></VisualStudio></ProjectExtensions>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="2.0.1" />

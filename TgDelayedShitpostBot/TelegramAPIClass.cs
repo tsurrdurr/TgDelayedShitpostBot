@@ -9,6 +9,8 @@ namespace TgDelayedShitpostBot
     public class TelegramAPIClass
     {
         private static TelegramBotClient Bot;
+        private bool canAddAnythingToQueue = false;
+
         private Timer timer = new Timer
         {
             Interval = Settings.Instance().timerIntervalSeconds * 1000,
@@ -50,7 +52,7 @@ namespace TgDelayedShitpostBot
             if (ShitpostQueue.posts.Count == 0) timer.Enabled = false;
         }
 
-        private void Bot_OnMessage(object sender, Telegram.Bot.Args.MessageEventArgs e)
+        private async void Bot_OnMessage(object sender, Telegram.Bot.Args.MessageEventArgs e)
         {
             var message = e.Message;
             if(message.Chat.Type == Telegram.Bot.Types.Enums.ChatType.Private)
@@ -59,6 +61,16 @@ namespace TgDelayedShitpostBot
                 {
                     if (e.Message.Photo != null)
                     {
+                        AddToRepostQueue(message);
+                    }
+                    else if(message.Text == @"/queue")
+                    {
+                        canAddAnythingToQueue = true;
+                        Bot.SendTextMessageAsync(message.Chat, "Awaiting for a message to queue.");
+                    }
+                    else if (canAddAnythingToQueue)
+                    {
+                        canAddAnythingToQueue = false;
                         AddToRepostQueue(message);
                     }
                     else
@@ -78,7 +90,7 @@ namespace TgDelayedShitpostBot
         {
             if (message.Text == "/help")
             {
-                Bot.SendTextMessageAsync(message.Chat, "Nothing here");
+                Bot.SendTextMessageAsync(message.Chat, "Post pictures you want to add to repost queue.\nUse /queue if you want to repost a non-picture in next message");
             }
             else
             {
@@ -95,6 +107,7 @@ namespace TgDelayedShitpostBot
                 context.Add(shitpost);
                 context.SaveChanges();
             }
+            Bot.SendTextMessageAsync(msg.Chat, "Message queued");
             if (!timer.Enabled) timer.Enabled = true;
         }
 
